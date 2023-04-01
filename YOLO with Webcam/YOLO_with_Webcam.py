@@ -39,18 +39,22 @@ while True:
     for r in results:
         boxes = r.boxes
         for box in boxes:
+
+            # Bounding box
             x1, y1, x2, y2 = box.xyxy[0]
             cvzone.cornerRect(img, (int(x1), int(y1), int(x2) - int(x1), int(y2) - int(y1)))
             # cv2.rectangle(img, (int(x1), int(y1)), (int(x2), int(y2)), (233, 50, 10), 3)
-            conf = math.ceil((box.conf[0] * 100)) / 100
-            # print(conf)
-            cvzone.putTextRect(img, f'{conf}', (max(20, int(x1)),max(50, int(y1))), 2, 2)
-            # cvzone.putTextRect(img, str(conf), (max(0, x1), max(35, y1)))
 
+            # Confidence
+            conf = math.ceil((box.conf[0] * 100)) / 100
+            # Class name
+            cls = box.cls[0]
+            cvzone.putTextRect(img, f'{classNames[int(cls)]} {conf}', (max(20, int(x1)),max(50, int(y1))), 2, 2)
+
+    # Adding FPS
     cTime = time.time()
     fps = 1 / (cTime - fTime)
     fTime = cTime
-    # print(fps)
     cv2.putText(img, str(int(fps)), (40, 60), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (255, 0, 0), 1)
 
     cv2.imshow("Image", img)
